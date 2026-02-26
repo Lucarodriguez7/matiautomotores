@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-yellow: #F5FF00;
+  --color-brand-black: #050505;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-black text-white font-sans antialiased overflow-x-hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+/* AOS Customizations */
+[data-aos] {
+  pointer-events: none;
+}
+.aos-animate {
+  pointer-events: auto;
+}
+
+.btn-primary {
+  @apply bg-brand-yellow text-brand-black font-extrabold px-6 py-4 md:px-8 md:py-4 rounded-none uppercase tracking-widest transition-all hover:bg-white hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-sm md:text-base;
+}
+
+.btn-outline {
+  @apply border-2 border-brand-yellow text-brand-yellow font-extrabold px-6 py-4 md:px-8 md:py-4 rounded-none uppercase tracking-widest transition-all hover:bg-brand-yellow hover:text-brand-black active:scale-95 flex items-center justify-center gap-2 text-sm md:text-base;
+}
