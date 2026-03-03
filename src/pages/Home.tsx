@@ -13,20 +13,76 @@ export default function Home() {
   const navigate = useNavigate();
   const featuredVehicles = vehicles.filter(v => v.featured).slice(0, 3);
 
-  const vehicleTypes = [
-    { name: 'SUV', icon: <Zap size={32} />, type: 'SUV' },
-    { name: 'Sedan', icon: <Car size={32} />, type: 'Sedan' },
-    { name: 'Hatchback', icon: <Zap size={32} />, type: 'Hatchback' },
-    { name: 'Pickup', icon: <Truck size={32} />, type: 'Pickup' },
-  ];
+ const vehicleTypes = [
+  {
+    name: 'Sedán',
+    type: 'Sedan' as const,
+    image: '/images/types/sedan.jpg',
+    tagline: 'Elegancia y confort',
+    description: 'Ideal para viajes cómodos y uso diario.',
+  },
+  {
+    name: 'Hatchback',
+    type: 'Hatchback' as const,
+    image: '/images/types/hatchback.jpg',
+    tagline: 'Ágil y urbano',
+    description: 'Compacto, moderno y eficiente.',
+  },
+  {
+    name: 'SUV',
+    type: 'SUV' as const,
+    image: '/images/types/suv.jpg',
+    tagline: 'Espacio y presencia',
+    description: 'Versatilidad para ciudad y ruta.',
+  },
+  {
+    name: 'Pick-Up',
+    type: 'Pickup' as const,
+    image: '/images/types/pickup.jpg',
+    tagline: 'Potencia total',
+    description: 'Trabajo y aventura sin límites.',
+  },
+] satisfies {
+  name: string;
+  type: 'SUV' | 'Sedan' | 'Hatchback' | 'Pickup';
+  image: string;
+  tagline: string;
+  description: string;
+}[];
+const CardContent = ({
+  image,
+  title,
+  tagline,
+  description,
+}: {
+  image: string;
+  title: string;
+  tagline: string;
+  description: string;
+}) => (
+  <>
+    <img
+      src={image}
+      alt={title}
+      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+    />
 
+    <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-colors" />
+
+    <div className="relative z-10 h-full flex flex-col justify-end p-6 text-left">
+      <h3 className="text-2xl font-black uppercase text-white">{title}</h3>
+      <p className="text-sm text-zinc-200 mt-2">{tagline}</p>
+      <p className="text-sm text-zinc-300 mt-1">{description}</p>
+    </div>
+  </>
+);
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
       <section className="relative min-h-[90vh] md:h-screen flex items-center justify-center overflow-hidden pt-20">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://picsum.photoseed/luxury-car/1920/1080?blur=1" 
+            src="https://imgur.com/5nJzwLQ.jpg" 
             alt="Hero Background" 
             className="w-full h-full object-cover opacity-40 scale-105"
             referrerPolicy="no-referrer"
@@ -125,57 +181,191 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Type Selector */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
-            <div className="space-y-4" data-aos="fade-right">
-              <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">
-                BUSCÁ POR <span className="text-brand-yellow">TIPO</span>
-              </h2>
-              <p className="text-zinc-500 max-w-md">Encontrá el vehículo que mejor se adapte a tu estilo de vida.</p>
-            </div>
-            <Link to="/catalogo" className="text-brand-yellow font-bold uppercase tracking-widest text-sm flex items-center gap-2 group">
-              Ver todos <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
+    <section className="py-24">
+  <div className="container mx-auto px-4">
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {vehicleTypes.map((item, idx) => (
-              <button 
-                key={item.name}
-                onClick={() => navigate(`/catalogo?type=${item.type}`)}
-                className="group relative h-64 bg-zinc-900 border border-white/5 overflow-hidden flex flex-col items-center justify-center gap-4 transition-all hover:border-brand-yellow"
-                data-aos="fade-up"
-                data-aos-delay={idx * 100}
-              >
-                <div className="text-zinc-600 group-hover:text-brand-yellow transition-colors duration-500">
-                  {item.icon}
-                </div>
-                <span className="text-xl font-bold uppercase tracking-widest group-hover:scale-110 transition-transform duration-500">
-                  {item.name}
-                </span>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-yellow scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-              </button>
-            ))}
-          </div>
+    {/* Header */}
+    <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+      <div className="space-y-4" data-aos="fade-right">
+        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">
+          BUSCÁ POR <span className="text-brand-yellow">TIPO</span>
+        </h2>
+        <p className="text-zinc-500 max-w-md">
+          Encontrá el vehículo que mejor se adapte a tu estilo de vida.
+        </p>
+      </div>
+    </div>
+
+    {/* GRID / SWIPE */}
+    <div
+      className="
+        flex gap-4 overflow-x-auto snap-x snap-mandatory
+        md:grid md:grid-cols-4 md:grid-rows-2 md:overflow-visible
+      "
+    >
+
+      {/* SEDÁN */}
+      <button
+        onClick={() => navigate('/catalogo?type=Sedan')}
+        className="
+          group relative min-w-[85%] sm:min-w-[70%] snap-center
+          md:min-w-0 md:col-span-2 md:row-span-1
+          h-[280px] overflow-hidden rounded-2xl
+        "
+        data-aos="fade-up"
+      >
+        <CardContent
+          image="https://imgur.com/u2qZ6Jk.jpg"
+          title="Sedán"
+          tagline="Elegancia y confort"
+          description="Descubrí el sedán ideal para vos y tu familia."
+        />
+      </button>
+
+      {/* MOTOS */}
+      <button
+        onClick={() => navigate('/catalogo?type=Moto')}
+        className="
+          group relative min-w-[85%] sm:min-w-[70%] snap-center
+          md:min-w-0 md:col-span-1 md:row-span-1
+          h-[280px] overflow-hidden rounded-2xl
+        "
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <CardContent
+          image="https://imgur.com/bC7uT9m.jpg"
+          title="Motos"
+          tagline="Libertad sobre dos ruedas"
+          description="Encontrá la moto que se adapta a tu estilo de vida."
+        />
+      </button>
+
+      {/* PICK-UP */}
+      <button
+        onClick={() => navigate('/catalogo?type=Pickup')}
+        className="
+          group relative min-w-[85%] sm:min-w-[70%] snap-center
+          md:min-w-0 md:col-span-1 md:row-span-2
+          h-[280px] md:h-full overflow-hidden rounded-2xl
+        "
+        data-aos="fade-left"
+      >
+        <CardContent
+          image="https://imgur.com/LI26Ce1.jpg"
+          title="Pick-Up"
+          tagline="Potencia y versatilidad"
+          description="La pick-up perfecta para trabajo o aventura."
+        />
+      </button>
+
+      {/* HATCHBACK */}
+      <button
+        onClick={() => navigate('/catalogo?type=Hatchback')}
+        className="
+          group relative min-w-[85%] sm:min-w-[70%] snap-center
+          md:min-w-0 md:col-span-3 md:row-span-1
+          h-[280px] overflow-hidden rounded-2xl
+        "
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        <CardContent
+          image="https://imgur.com/UD59O12.jpg"
+          title="Hatchback"
+          tagline="Ágil, compacto y con estilo"
+          description="Movete con libertad en la ciudad."
+        />
+      </button>
+
+    </div>
+  </div>
+</section>
+
+    {/* Featured Vehicles */}
+<section className="py-24 bg-zinc-950">
+  <div className="container mx-auto px-4">
+
+    <h2
+      className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-16 text-center"
+      data-aos="fade-up"
+    >
+      DESTACADOS DE LA <span className="text-brand-yellow">SEMANA</span>
+    </h2>
+
+    <div
+      className="
+        flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4
+        md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible
+      "
+    >
+      {featuredVehicles.map((vehicle, index) => (
+        <div
+          key={vehicle.id}
+          className="
+            min-w-[85%] sm:min-w-[70%] snap-center
+            md:min-w-0
+          "
+          data-aos="fade-up"
+          data-aos-delay={index * 100}
+        >
+          <VehicleCard vehicle={vehicle} />
         </div>
-      </section>
+      ))}
+    </div>
 
-      {/* Featured Vehicles */}
-      <section className="py-24 bg-zinc-950">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-16 text-center" data-aos="fade-up">
-            DESTACADOS DE LA <span className="text-brand-yellow">SEMANA</span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredVehicles.map((vehicle) => (
-              <VehicleCard key={vehicle.id} vehicle={vehicle} />
-            ))}
-          </div>
-        </div>
-      </section>
+  </div>
+</section>
+<section className="py-24">
+  <div className="container mx-auto px-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-zinc-900/60 border border-white/5 rounded-3xl p-10 lg:p-16">
 
+      {/* TEXTO */}
+      <div
+        className="space-y-6"
+        data-aos="fade-right"
+      >
+        <span className="text-sm uppercase tracking-widest text-brand-yellow font-bold">
+          Comunidad
+        </span>
+
+        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white">
+          Seguinos en <span className="text-brand-yellow">Instagram</span>
+        </h2>
+
+        <p className="text-zinc-400 text-lg max-w-xl leading-relaxed">
+          Enterate antes que nadie de las nuevas unidades, oportunidades únicas,
+          ingresos recientes y contenido exclusivo que no publicamos en otro lado.
+        </p>
+
+        <a
+          href="https://www.instagram.com/mati_automotores_/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-yellow text-black font-bold uppercase tracking-widest text-sm transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(234,179,8,0.35)]"
+        >
+          Ver Instagram
+        </a>
+      </div>
+
+     <div
+  className="
+    relative w-full
+    aspect-[4/5] sm:aspect-[3/4]
+    lg:aspect-auto lg:h-[420px]
+    rounded-2xl overflow-hidden
+  "
+  data-aos="fade-left"
+>
+  <img
+    src="https://i.imgur.com/pBOCKKM.jpg"
+    alt="Instagram Mati Automotores"
+    className="w-full h-full object-cover"
+  />
+</div>
+    </div>
+  </div>
+</section>
       {/* Commercial Banners */}
       <section className="py-24">
         <div className="container mx-auto px-4 space-y-8">
@@ -186,7 +376,7 @@ export default function Home() {
               onClick={() => navigate('/financiacion')}
             >
               <img 
-                src="https://picsum.photos/seed/finance/800/600" 
+                src="https://imgur.com/19txDnb.jpg" 
                 alt="Financiación" 
                 className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700"
                 referrerPolicy="no-referrer"
@@ -207,7 +397,7 @@ export default function Home() {
               onClick={() => navigate('/consignacion')}
             >
               <img 
-                src="https://picsum.photos/seed/sell/800/600" 
+                src="https://imgur.com/yWbvRwl.jpg" 
                 alt="Consignación" 
                 className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700"
                 referrerPolicy="no-referrer"
